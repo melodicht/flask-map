@@ -1,0 +1,19 @@
+{% extends "layout.html" %}
+
+{% block content %}
+<main class="hero-section">
+  <div class="container">
+
+    <div class="section-content">
+      <h2>Discover places near you.</h2>
+      <a href="#" class="button-rounded-hover">Sign up</a>
+      <a href="#" class="button-rounded-hover">Learn more</a>
+    </div>
+
+    <div class="section-device">
+      <img src="{{ url_for('static', filename='img/worldmap.img') }}">
+    </div>
+
+  </div>
+</main>
+{% endblock %}
