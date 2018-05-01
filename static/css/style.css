@@ -144,3 +144,5 @@ a {
   font-size: 0.875rem;
   color: #0c3e5f;
 }
+
+#map { height: 180px; }

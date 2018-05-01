@@ -1,0 +1,68 @@
+{% extends "layout.html" %}
+
+{% block content %}
+<main class="container home-section">
+
+    <div class="section-content">
+      <h2>Search a place</h2>
+      <form method="POST" action="/home">
+        {{ form.hidden_tag() }}
+
+        <div class="form-group">
+          {% if form.address.errors %}
+            {% for error in form.address.errors %}
+              <p class="error-message">{{ error }}</p>
+            {% endfor %}
+          {% endif %}
+
+          {{ form.address(placeholder="Explore nearby") }}
+        </div>
+
+        {{ form.submit(class="btn-primary") }}
+
+        <div class="places">
+          {% for place in places %}
+            <a href=" {{ place['url'] }}"<h3>{{ place['name'] }}</h3></a>
+            <p>Travelling time: {{ place['time'] }} minutes</p>
+            <p>{{ place['lat'], place['lng'] }}</p>
+          {% endfor %}
+        </div>
+
+      </form>
+
+    </div>
+
+    <div class="section-device">
+    </div>
+
+</main>
+<div id="map" style="width: 600px; height: 400px;"></div>
+<script>
+  var i;
+  var mymap = L.map('map').setView([{{ my_coordinates[0]}}, {{ my_coordinates[1] }}], 13);
+
+	L.tileLayer('https://api.tiles.mapbox.com/v4/{id}/{z}/{x}/{y}.png?access_token=pk.eyJ1IjoibWFwYm94IiwiYSI6ImNpejY4NXVycTA2emYycXBndHRqcmZ3N3gifQ.rJcFIG214AriISLbB6B5aw', {
+		maxZoom: 18,
+		attribution: 'Map data &copy; <a href="http://openstreetmap.org">OpenStreetMap</a> contributors, ' +
+			'<a href="http://creativecommons.org/licenses/by-sa/2.0/">CC-BY-SA</a>, ' +
+			'Imagery © <a href="http://mapbox.com">Mapbox</a>',
+		id: 'mapbox.streets'
+	}).addTo(mymap);
+
+
+  {%  if places|length > 2 %}
+  {% for p in places %}
+      L.marker([{{ p['lat'] }}, {{ p['lng'] }}]).addTo(mymap);
+  {% endfor %}
+  {% endif %}
+
+	L.circle([{{ my_coordinates[0]}}, {{ my_coordinates[1] }}], {
+		color: 'red',
+		fillColor: '#f03',
+		fillOpacity: 0.5,
+		radius: 500
+	}).addTo(mymap);
+
+</script>
+
+{% endblock %}
